@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
+
 
 public class Matcher {
 
-	public static HashMap<String,ArrayList<String>> generateHash(int n){
-		HashMap<String,ArrayList<String>> linkedIn = new HashMap(n);
+	public static LinkedHashMap<String,ArrayList<String>> generateHash(int n){
+		LinkedHashMap<String,ArrayList<String>> linkedIn = new LinkedHashMap(n);
 		for (int i=1; i<=n;i++){
 			ArrayList<String> temp = new ArrayList<String>(n);
 			for (int j=1;j<=n;j++){
@@ -29,13 +29,12 @@ public class Matcher {
 		return linkedIn;
 	}
 
-	public static void printHashMap(HashMap<String,ArrayList<String>> hash){
+	public static void printHashMap(LinkedHashMap<String,ArrayList<String>> hash){
 		int numOfPairs = hash.size() / 2;
 		ArrayList listOfKeys = new ArrayList();
 		for (String key : hash.keySet()){
 			listOfKeys.add(key);
 		}
-		Collections.sort(listOfKeys);
 		System.out.println(Arrays.toString(listOfKeys.toArray()));
 		
 	}
