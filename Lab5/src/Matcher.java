@@ -1,11 +1,19 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
-public class Matcher {
+public class Matcher extends Pair {
 
+	public Matcher(String str1, String str2) {
+		super(str1, str2);
+		// TODO Auto-generated constructor stub
+	}
+
+	static LinkedHashMap<String, String> currentPairs = new LinkedHashMap<String, String>();
+	
 	public static LinkedHashMap<String,ArrayList<String>> generateHash(int n){
 		LinkedHashMap<String,ArrayList<String>> linkedIn = new LinkedHashMap<String,ArrayList<String>>(n);
 		for (int i=1; i<=n;i++){
@@ -42,8 +50,35 @@ public class Matcher {
 		
 		//System.out.println(Arrays.toString(listOfKeys.toArray()));
 	}
+	
+	
+	public static LinkedHashMap<String, String> generateState(LinkedHashMap<String,ArrayList<String>> hash){
+		int numOfPairs = hash.size() / 2;
+		ArrayList<String> listOfKeys = new ArrayList<String>(numOfPairs);
+		LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
+		
+		for (String key : hash.keySet()){
+			ArrayList<String> temp = hash.get(key);
+			currentPairs.put(key, temp.get(0));
+			System.out.println(key + " " + temp.get(0));
+		}
+		for (int i = 0; i < numOfPairs; i++){
+			
+				
+			}
+		}
+		return result;
+	}
+	
+	private static Pair Pair(String string, String string2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	public static void main(String [] args){
-		printHashMap(generateHash(5));
+		LinkedHashMap<String, ArrayList<String>> test = generateHash(5);
+		printHashMap(test);
+		generateState(test);
+		
 	}
 }
