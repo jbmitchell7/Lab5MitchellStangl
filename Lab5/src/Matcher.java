@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 public class Matcher {
 
 	public static LinkedHashMap<String,ArrayList<String>> generateHash(int n){
-		LinkedHashMap<String,ArrayList<String>> linkedIn = new LinkedHashMap(n);
+		LinkedHashMap<String,ArrayList<String>> linkedIn = new LinkedHashMap<String,ArrayList<String>>(n);
 		for (int i=1; i<=n;i++){
 			ArrayList<String> temp = new ArrayList<String>(n);
 			for (int j=1;j<=n;j++){
@@ -31,12 +31,16 @@ public class Matcher {
 
 	public static void printHashMap(LinkedHashMap<String,ArrayList<String>> hash){
 		int numOfPairs = hash.size() / 2;
-		ArrayList listOfKeys = new ArrayList();
+		ArrayList<String> listOfKeys = new ArrayList<String>(numOfPairs);
+		
 		for (String key : hash.keySet()){
+			ArrayList<String> temp = hash.get(key);
+			System.out.print(key + " ");
+			System.out.println(Arrays.toString(temp.toArray()));
 			listOfKeys.add(key);
 		}
-		System.out.println(Arrays.toString(listOfKeys.toArray()));
 		
+		//System.out.println(Arrays.toString(listOfKeys.toArray()));
 	}
 
 	public static void main(String [] args){
