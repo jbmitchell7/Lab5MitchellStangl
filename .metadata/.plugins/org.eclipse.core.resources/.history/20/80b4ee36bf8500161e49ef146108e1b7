@@ -1,0 +1,11 @@
+
+public class Pair {
+
+	public String company = "";
+	public String programmer = "";
+	public Pair(String str1, String str2){
+		company = str1;
+		programmer = str2;
+	}
+}
+
