@@ -7,13 +7,13 @@ import java.util.LinkedHashMap;
 
 public class Matcher {
 
-
+	//declaring global variables
 	public static LinkedHashMap<String,String> currentState = new LinkedHashMap<String,String>();
 	public static int numOfPairs = 0;
-
 	public static LinkedHashMap<String,ArrayList<String>> linkedInP = new LinkedHashMap<String,ArrayList<String>>();
 	public static LinkedHashMap<String,ArrayList<String>> linkedInC = new LinkedHashMap<String,ArrayList<String>>();
 
+	//generates initial hashmap of n companies and programmers
 	public static void generateHash(int n){
 
 		numOfPairs = n;
@@ -38,7 +38,8 @@ public class Matcher {
 		}
 
 	}
-
+	
+	//method for printing the initially generated hashmap
 	public static void printHashMap(){
 		ArrayList<String> listOfKeys = new ArrayList<String>();
 
@@ -57,13 +58,15 @@ public class Matcher {
 		}
 		System.out.println("*************************************");
 	}
-
+	
+	//sets initial preferences- not satisfactory
 	public static void generateStartState(){
 		for (int i = 1;i<=numOfPairs;i++){
 			currentState.put("C" + i, "P" + i);
 		}
 	}
 	
+	//prints the pairs of companies and programmers
 	public static void printState(){
 		for (int i = 1; i <= numOfPairs; i++){
 			System.out.println("C" + i + " " + currentState.get("C" + i));
@@ -71,6 +74,7 @@ public class Matcher {
 		System.out.println("*************************************");
 	}
 	
+	//gets the ranking of a company and programmer pair
 	public static int getRank(String str1,String str2){
 		if (str1.substring(0,1).equals("C")){
 			ArrayList<String> tempP = linkedInC.get(str1);
@@ -92,13 +96,10 @@ public class Matcher {
 		return 0;
 	}
 	
+	//checks if there is a more satisfactory pairing available
 	public static boolean canSwap(String C1, String P1, String C2, String P2){
-		//int rankC1P1 = getRank(C1,P1);
 		int rankP1C1 = getRank(P1,C1);
 		int rankC2P2 = getRank(C2,P2);
-		//int rankP2C2 = getRank(P2,C2);
-		//int rankC1P2 = getRank(C1,P2);
-		//int rankP2C1 = getRank(P2,C1);
 		int rankC2P1 = getRank(C2,P1);
 		int rankP1C2 = getRank(P1,C2);
 		
@@ -108,6 +109,7 @@ public class Matcher {
 		return false;
 	}
 	
+	//checks if pairing is satisfactory-basically the reverse of canSwap
 	public static boolean isSatisfactory(String C1, String P1, String C2, String P2){
 		int rankP1C1 = getRank(P1,C1);
 		int rankC2P2 = getRank(C2,P2);
@@ -120,11 +122,13 @@ public class Matcher {
 		return true;
 	}
 	
+	//swaps elements
 	public static void doSwap(String C1, String P1, String C2, String P2){
 		currentState.replace(C1, P2);
 		currentState.replace(C2, P1);
 	}
 	
+	//the algorithm- calls the helpers on every key in each hashmap
 	public static void match(){
 		int counter = 0;
 		
@@ -147,6 +151,7 @@ public class Matcher {
 		}
 	}
 	
+	//checks all pairs for satisfaction and prints the result
 	public static void checkForSatisfaction(){
 		int counter = 0;
 		
@@ -169,13 +174,18 @@ public class Matcher {
 			System.out.println("Satisfaction guaranteed");
 	}
 
+	//main
 	public static void main(String [] args){
-		generateHash(5);
-		generateStartState();
-		printHashMap();
-		printState();
-		match();
-		printState();
-		checkForSatisfaction();
+		for(int i = 0; i<3; i++){
+			System.out.println("Testing " + (i+5) + " Companies and Programmers");
+			generateHash(i+5);
+			generateStartState();
+			printHashMap();
+			//printState();
+			match();
+			printState();
+			checkForSatisfaction();
+			System.out.println("*************************************");
+		}
 	}
 }
