@@ -10,7 +10,6 @@ public class Matcher {
 
 	public static LinkedHashMap<String,String> currentState = new LinkedHashMap<String,String>();
 	public static int numOfPairs = 0;
-	//static ArrayList<String><String> currentPairs = new LinkedHashMap<String, String>();
 
 	public static LinkedHashMap<String,ArrayList<String>> linkedInP = new LinkedHashMap<String,ArrayList<String>>();
 	public static LinkedHashMap<String,ArrayList<String>> linkedInC = new LinkedHashMap<String,ArrayList<String>>();
@@ -57,8 +56,6 @@ public class Matcher {
 			listOfKeys.add(key);
 		}
 		System.out.println("*************************************");
-
-		//System.out.println(Arrays.toString(listOfKeys.toArray()));
 	}
 
 	public static void generateStartState(){
@@ -111,6 +108,18 @@ public class Matcher {
 		return false;
 	}
 	
+	public static boolean isSatisfactory(String C1, String P1, String C2, String P2){
+		int rankP1C1 = getRank(P1,C1);
+		int rankC2P2 = getRank(C2,P2);
+		int rankC2P1 = getRank(C2,P1);
+		int rankP1C2 = getRank(P1,C2);
+		
+		if ((rankP1C2 < rankP1C1) && (rankC2P1 < rankC2P2)){
+			return false;
+		}
+		return true;
+	}
+	
 	public static void doSwap(String C1, String P1, String C2, String P2){
 		currentState.replace(C1, P2);
 		currentState.replace(C2, P1);
@@ -137,6 +146,28 @@ public class Matcher {
 			match();
 		}
 	}
+	
+	public static void checkForSatisfaction(){
+		int counter = 0;
+		
+		for (int i = 1;i <=numOfPairs;i++){
+			String Ci = "C" + i;
+			for (int j = 1; j <= numOfPairs; j++){
+				String Cj = "C" + j;
+				if (isSatisfactory(Ci,currentState.get(Ci),Cj,currentState.get(Cj))){
+					counter++;
+				}
+				if (isSatisfactory(Cj,currentState.get(Cj),Ci,currentState.get(Ci))){
+					counter++;
+				}
+			}
+		}
+		if (counter != 2 * numOfPairs*numOfPairs){
+			System.out.println("There is unsatisfaction");
+		}
+		else 
+			System.out.println("Satisfaction guaranteed");
+	}
 
 	public static void main(String [] args){
 		generateHash(5);
@@ -145,5 +176,6 @@ public class Matcher {
 		printState();
 		match();
 		printState();
+		checkForSatisfaction();
 	}
 }
