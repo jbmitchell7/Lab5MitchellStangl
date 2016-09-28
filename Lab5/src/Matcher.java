@@ -1,24 +1,24 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+
 import java.util.LinkedHashMap;
 
 
-public class Matcher extends Pair {
+public class Matcher {
 
-	public Matcher(String str1, String str2) {
-		super(str1, str2);
-		// TODO Auto-generated constructor stub
-	}
 
+	public static LinkedHashMap<String,String> currentState = new LinkedHashMap<String,String>();
+	public static int numOfPairs = 0;
 	//static ArrayList<String><String> currentPairs = new LinkedHashMap<String, String>();
 
-	public static LinkedHashMap<String,ArrayList<String>> linkedIn = new LinkedHashMap<String,ArrayList<String>>();
-	public static LinkedHashMap<String,ArrayList<String>> linkedIn2 = new LinkedHashMap<String,ArrayList<String>>();
+	public static LinkedHashMap<String,ArrayList<String>> linkedInP = new LinkedHashMap<String,ArrayList<String>>();
+	public static LinkedHashMap<String,ArrayList<String>> linkedInC = new LinkedHashMap<String,ArrayList<String>>();
 
 	public static void generateHash(int n){
 
+		numOfPairs = n;
+		
 		for (int i=1; i<=n;i++){
 			ArrayList<String> temp = new ArrayList<String>(n);
 			for (int j=1;j<=n;j++){
@@ -26,7 +26,7 @@ public class Matcher extends Pair {
 				temp.add(tempS);
 			}
 			Collections.shuffle(temp);
-			linkedIn.put("P" + i, temp);
+			linkedInP.put("P" + i, temp);
 		}
 		for (int i=1; i<=n;i++){
 			ArrayList<String> temp = new ArrayList<String>(n);
@@ -35,7 +35,7 @@ public class Matcher extends Pair {
 				temp.add(tempS);
 			}
 			Collections.shuffle(temp);
-			linkedIn2.put("C" + i, temp);
+			linkedInC.put("C" + i, temp);
 		}
 
 	}
@@ -43,71 +43,107 @@ public class Matcher extends Pair {
 	public static void printHashMap(){
 		ArrayList<String> listOfKeys = new ArrayList<String>();
 
-		for (String key : linkedIn.keySet()){
-			ArrayList<String> temp = linkedIn.get(key);
+		for (String key : linkedInP.keySet()){
+			ArrayList<String> temp = linkedInP.get(key);
 			System.out.print(key + " ");
 			System.out.println(Arrays.toString(temp.toArray()));
 			listOfKeys.add(key);
 		}
-		for (String key : linkedIn2.keySet()){
-			ArrayList<String> temp = linkedIn2.get(key);
+		System.out.println("*************************************");
+		for (String key : linkedInC.keySet()){
+			ArrayList<String> temp = linkedInC.get(key);
 			System.out.print(key + " ");
 			System.out.println(Arrays.toString(temp.toArray()));
 			listOfKeys.add(key);
 		}
+		System.out.println("*************************************");
 
 		//System.out.println(Arrays.toString(listOfKeys.toArray()));
 	}
 
-
-	public static LinkedHashMap<String, String> generateState(int num){
-		int numOfPairs = num;
-		//ArrayList<String> listOfKeys = new ArrayList<String>(numOfPairs);
-		LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
-		int counter = 1;
-		/*for (String key : hash.keySet()){
-			ArrayList<String> temp = hash.get(key);
-			currentPairs.put(key, temp.get(0));
-			System.out.println(key + " " + temp.get(0));
-		}*/
-		//while (counter != numOfPairs * 2){
-		for (int i = 1; i <= numOfPairs; i++){
-			ArrayList<String> tempP = linkedIn.get("P" + i);
-			for (int j = 1; j <= numOfPairs; j++){
-				ArrayList<String> tempC = linkedIn2.get("C" + j);
-				if ((tempC.get(0).equals("P" + i)) && (tempP.get(0).equals("C" + j)) && 
-						!result.containsKey("C" + j) && !result.containsValue("P"+i)){
-					result.put("C" + i, tempC.get(0));
-					//counter++;
-					System.out.println("C" + j + ", " + tempC.get(0));
-					for (int k = 1; k < numOfPairs; k++){
-						for (int m = 1; m < numOfPairs; m++){
-							if (linkedIn.get("P"+ k).get(0).equals(tempP.get(0))){
-								String remove = linkedIn.get("P"+ k).get(0);
-								linkedIn.get("P"+ k).set(m-1, linkedIn.get("P"+ k).get(m));
-								linkedIn.get("P"+ k).set(m, remove);
-							}
-							if (linkedIn2.get("C" + k).get(0).equals(tempC.get(0))){
-								String remove = linkedIn2.get("C" + k).get(0);
-								linkedIn2.get("C" + k).set(m-1, linkedIn2.get("C" + k).get(m));
-								linkedIn2.get("C" + k).set(m, remove);
-							}
-						}
-					}
-				}
-
-			}	
-
+	public static void generateStartState(){
+		for (int i = 1;i<=numOfPairs;i++){
+			currentState.put("C" + i, "P" + i);
 		}
-
-		return result;
 	}
-
+	
+	public static void printState(){
+		for (int i = 1; i <= numOfPairs; i++){
+			System.out.println("C" + i + " " + currentState.get("C" + i));
+		}
+		System.out.println("*************************************");
+	}
+	
+	public static int getRank(String str1,String str2){
+		if (str1.substring(0,1).equals("C")){
+			ArrayList<String> tempP = linkedInC.get(str1);
+			for (int i = 0;i<numOfPairs;i++){
+				if (tempP.get(i).equals(str2)){
+					return i+1;
+				}
+			}
+		}
+		
+		if (str1.substring(0,1).equals("P")){
+			ArrayList<String> tempC = linkedInP.get(str1);
+			for (int j = 0;j<numOfPairs;j++){
+				if (tempC.get(j).equals(str2)){
+					return j+1;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	public static boolean canSwap(String C1, String P1, String C2, String P2){
+		//int rankC1P1 = getRank(C1,P1);
+		int rankP1C1 = getRank(P1,C1);
+		int rankC2P2 = getRank(C2,P2);
+		//int rankP2C2 = getRank(P2,C2);
+		//int rankC1P2 = getRank(C1,P2);
+		//int rankP2C1 = getRank(P2,C1);
+		int rankC2P1 = getRank(C2,P1);
+		int rankP1C2 = getRank(P1,C2);
+		
+		if ((rankP1C2 < rankP1C1) && (rankC2P1 < rankC2P2)){
+			return true;
+		}
+		return false;
+	}
+	
+	public static void doSwap(String C1, String P1, String C2, String P2){
+		currentState.replace(C1, P2);
+		currentState.replace(C2, P1);
+	}
+	
+	public static void match(){
+		int counter = 0;
+		
+		for (int i = 1;i <=numOfPairs;i++){
+			String Ci = "C" + i;
+			for (int j = 1; j <= numOfPairs; j++){
+				String Cj = "C" + j;
+				if (canSwap(Ci,currentState.get(Ci),Cj,currentState.get(Cj))){
+					doSwap(Ci,currentState.get(Ci),Cj,currentState.get(Cj));
+					counter++;
+				}
+				if (canSwap(Cj,currentState.get(Cj),Ci,currentState.get(Ci))){
+					doSwap(Cj,currentState.get(Cj),Ci,currentState.get(Ci));
+					counter++;
+				}
+			}
+		}
+		if (counter != 0){
+			match();
+		}
+	}
 
 	public static void main(String [] args){
 		generateHash(5);
+		generateStartState();
 		printHashMap();
-		generateState(5);
-		printHashMap();
+		printState();
+		match();
+		printState();
 	}
 }
