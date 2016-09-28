@@ -68,7 +68,7 @@ public class Tester extends Matcher{
 		System.out.println("*************************************");
 	}
 
-	//main
+	//main- to change test output, change the input to generateHash below
 	public static void main(String [] args){
 		for(int i = 0; i<3; i++){
 			System.out.println("Testing " + (i+5) + " Companies and Programmers");
